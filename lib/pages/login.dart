@@ -30,7 +30,9 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
       print("Error code: ${e.code}");
       print("Error message: ${e.message}");
     }
