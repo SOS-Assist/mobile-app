@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/auth_components.dart';
-import 'package:mobile_app/pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -15,7 +15,37 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signUserIn() {}
+  void signUserIn() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      print("Error code: ${e.code}");
+      print("Error message: ${e.message}");
+    }
+  }
+
+  void failedLoginMessage(String msg) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(msg),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,70 +74,64 @@ class _LoginPageState extends State<LoginPage> {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    AuthTextField(
-                      labelText: "Email",
-                      controller: emailController,
-                      hintText: "main@example.com",
-                      obscureText: false,
-                    ),
-                    AuthTextField(
-                      labelText: "Password",
-                      controller: passwordController,
-                      hintText: "********",
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: rememberMe,
-                              onChanged: (value) {
-                                setState(() {
-                                  rememberMe = value!;
-                                });
-                              },
-                            ),
-                            Text("Remember Me"),
-                          ],
-                        ),
-                        Text("Forgot Password?"),
-                      ],
-                    ),
-                    LoginButton(
-                      // onTap: signUserIn,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      AuthTextField(
+                        labelText: "Email",
+                        controller: emailController,
+                        hintText: "main@example.com",
+                        obscureText: false,
+                      ),
+                      AuthTextField(
+                        labelText: "Password",
+                        controller: passwordController,
+                        hintText: "********",
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: rememberMe,
+                                onChanged: (value) {
+                                  setState(() {
+                                    rememberMe = value!;
+                                  });
+                                },
+                              ),
+                              Text("Remember Me"),
+                            ],
                           ),
-                        );
-                      },
-                      labelAction: "Login",
-                    ),
-                    GoogleButton(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Already have an account? "),
-                        GestureDetector(
-                          onTap: widget.onTap,
-                          child: Text(
-                            "Register",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.primary,
+                          Text("Forgot Password?"),
+                        ],
+                      ),
+                      LoginButton(
+                        onTap: signUserIn,
+                        labelAction: "Login",
+                      ),
+                      GoogleButton(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Not a member? "),
+                          GestureDetector(
+                            onTap: widget.onTap,
+                            child: Text(
+                              "Register",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.primary,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
