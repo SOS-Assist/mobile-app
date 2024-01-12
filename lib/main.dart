@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/pages/home.dart';
+import 'package:mobile_app/pages/login.dart';
 
 void main() {
   runApp(const App());
@@ -46,6 +47,6 @@ class App extends StatelessWidget {
             displayColor: textColor,
           ),
         ),
-        home: const HomePage());
+        home: const LoginPage());
   }
 }
