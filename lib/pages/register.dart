@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/auth_components.dart';
-import 'package:mobile_app/pages/home.dart';
-import 'package:mobile_app/pages/login.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final Function()? onTap;
+  const RegisterPage({super.key, required this.onTap});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -13,7 +13,38 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool terms = false;
 
-  void Register() {}
+  void Register() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      failedLoginMessage(e.code);
+    }
+  }
+
+  void failedLoginMessage(String msg) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(msg),
+        );
+      },
+    );
+  }
 
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
@@ -21,29 +52,32 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFFFF3737),
+      backgroundColor: colorScheme.primary,
       body: SafeArea(
         child: Column(
           children: [
             HeadAuth(
-              title: "Create an account",
+              title: "Create an Account",
               greeting:
                   "Let’s create a new account and get started with your 30 days free trial.",
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 30),
             Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
+              child: Container(
+                padding: EdgeInsets.all(25),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
                   ),
+                ),
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
                       AuthTextField(
@@ -80,15 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ],
                       ),
                       LoginButton(
-                        // onTap: Register,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                          );
-                        },
+                        onTap: Register,
                         labelAction: "Register",
                       ),
                       GoogleButton(),
@@ -96,15 +122,15 @@ class _RegisterPageState extends State<RegisterPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("Already have an account? "),
-                          TextButton(
-                            child: Text("Login"),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => LoginPage(),
-                                  ));
-                            },
+                          GestureDetector(
+                            onTap: widget.onTap,
+                            child: Text(
+                              "Login",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.primary,
+                              ),
+                            ),
                           ),
                         ],
                       ),

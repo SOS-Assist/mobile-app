@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/widgets/sos.dart';
@@ -18,11 +19,22 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  static const List<Widget> _widgetOptions = [
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
+  final List<Widget> _widgetOptions = [
     Sos(),
     Center(child: Text('(Nearby)')),
     Center(child: Text('(History)')),
-    Center(child: Text('(Profile)')),
+    Center(
+      child: IconButton(
+        onPressed: () {
+          FirebaseAuth.instance.signOut();
+        },
+        icon: Icon(Icons.logout),
+      ),
+    ),
   ];
 
   @override
