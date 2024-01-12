@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "689406118129",
+    "project_id": "sos-assist-0001",
+    "storage_bucket": "sos-assist-0001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689406118129:android:4346aa21c685a5a2dd0150",
+        "android_client_info": {
+          "package_name": "com.example.mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFKa4Oo_VCSFOhwzj_igu50tbcvyCn5qQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
