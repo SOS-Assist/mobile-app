@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/pages/home.dart';
 
 class HeadAuth extends StatelessWidget {
   const HeadAuth({
@@ -24,7 +23,7 @@ class HeadAuth extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 30),
                     Text(
                       title,
                       style: TextStyle(
@@ -71,7 +70,7 @@ class AuthTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 30),
+        const SizedBox(height: 10),
         Text(
           labelText,
           style: TextStyle(

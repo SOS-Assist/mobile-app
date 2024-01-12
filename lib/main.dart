@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/pages/home.dart';
-import 'package:mobile_app/pages/login.dart';
+import 'package:mobile_app/pages/login_or_register.dart';
 
 void main() {
   runApp(const App());
@@ -47,6 +47,6 @@ class App extends StatelessWidget {
             displayColor: textColor,
           ),
         ),
-        home: const LoginPage());
+        home: const LoginOrRegisterPage());
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/auth_components.dart';
 import 'package:mobile_app/pages/home.dart';
-import 'package:mobile_app/pages/register.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final Function()? onTap;
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
               greeting:
                   "Sign in now to access back your account and the whole features!",
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 30),
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(25),
@@ -95,15 +95,15 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Already have an account? "),
-                        TextButton(
-                          child: Text("Register"),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RegisterPage(),
-                                ));
-                          },
+                        GestureDetector(
+                          onTap: widget.onTap,
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.primary,
+                            ),
+                          ),
                         ),
                       ],
                     ),
