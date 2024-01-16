@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/pages/ongoing_sos.dart';
 
 class Sos extends StatefulWidget {
-  const Sos({super.key});
+  final UserModel? user;
+
+  const Sos({super.key, required this.user});
 
   @override
   State<Sos> createState() => _SosState();
@@ -26,7 +29,7 @@ class _SosState extends State<Sos> {
           backgroundColor: Colors.white.withOpacity(0),
           toolbarHeight: 120,
           titleSpacing: 22,
-          title: const GreetingsText(),
+          title: GreetingsText(name: widget.user!.name),
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -54,7 +57,9 @@ class _SosState extends State<Sos> {
 }
 
 class GreetingsText extends StatelessWidget {
-  const GreetingsText({super.key});
+  final String name;
+
+  const GreetingsText({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +79,10 @@ class GreetingsText extends StatelessWidget {
               ),
             )),
         const SizedBox(width: 14),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Hello,',
               style: TextStyle(
                 fontSize: 16,
@@ -85,10 +90,10 @@ class GreetingsText extends StatelessWidget {
                 color: Color.fromRGBO(30, 32, 34, 1.0),
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
-              'Rama Astra 👋',
-              style: TextStyle(
+              '$name 👋',
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Color.fromRGBO(30, 32, 34, 1.0),

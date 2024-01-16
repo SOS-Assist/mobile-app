@@ -16,7 +16,7 @@ class AuthPage extends StatelessWidget {
         stream: _authenticationService.userStream,
         builder: ((context, snapshot) {
           if (snapshot.hasData) {
-            return const HomePage();
+            return HomePage(userUid: snapshot.data!.uid);
           } else {
             return const LoginOrRegisterPage();
           }
