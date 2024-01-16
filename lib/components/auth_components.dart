@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class HeadAuth extends StatelessWidget {
@@ -13,7 +12,7 @@ class HeadAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
         children: [
           Row(
@@ -26,16 +25,16 @@ class HeadAuth extends StatelessWidget {
                     const SizedBox(height: 30),
                     Text(
                       title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       greeting,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
                       ),
@@ -52,8 +51,8 @@ class HeadAuth extends StatelessWidget {
 }
 
 class AuthTextField extends StatelessWidget {
-  final labelText;
-  final controller;
+  final String labelText;
+  final TextEditingController controller;
   final String hintText;
   final bool obscureText;
 
@@ -73,7 +72,7 @@ class AuthTextField extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           labelText,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
           ),
         ),
@@ -82,7 +81,7 @@ class AuthTextField extends StatelessWidget {
           controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
-            border: OutlineInputBorder(
+            border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
               borderSide: BorderSide(color: Colors.white),
             ),
@@ -97,7 +96,7 @@ class AuthTextField extends StatelessWidget {
 
 class LoginButton extends StatelessWidget {
   final Function()? onTap;
-  final labelAction;
+  final String labelAction;
   const LoginButton(
       {super.key, required this.onTap, required this.labelAction});
 
@@ -109,16 +108,16 @@ class LoginButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        margin: EdgeInsets.symmetric(vertical: 25),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 25),
         decoration: BoxDecoration(
           color: colorScheme.primary,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Center(
           child: Text(
             labelAction,
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            style: const TextStyle(color: Colors.white, fontSize: 18),
           ),
         ),
       ),
@@ -135,11 +134,11 @@ class GoogleButton extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      margin: EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         border: Border.all(color: colorScheme.outline),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -149,7 +148,7 @@ class GoogleButton extends StatelessWidget {
             height: 30,
           ),
           const SizedBox(width: 10),
-          Text("Continue With Google"),
+          const Text("Continue With Google"),
         ],
       ),
     );
