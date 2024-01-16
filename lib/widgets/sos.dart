@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
-import 'package:mobile_app/pages/ongoing_sos.dart';
+import 'package:mobile_app/pages/sos_call.dart';
 
 class Sos extends StatefulWidget {
   final UserModel? user;
@@ -160,7 +160,7 @@ class SosButton extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const OngoingSos(),
+                      builder: (context) => SosCallPage(sosType: sosType),
                     ),
                   );
                 },
