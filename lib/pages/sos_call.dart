@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,6 +13,30 @@ class SosCallPage extends StatefulWidget {
 }
 
 class _SosCallPageState extends State<SosCallPage> {
+  static const startTime = 5;
+  int _second = startTime;
+  Timer? timer;
+
+  void _startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted && _second > 0) {
+        setState(() => _second--);
+      } else {
+        _stopTimer();
+      }
+    });
+  }
+
+  void _stopTimer() {
+    timer?.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -64,10 +90,10 @@ class _SosCallPageState extends State<SosCallPage> {
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        '5',
-                        style: TextStyle(
+                        _second.toString(),
+                        style: const TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.w500,
                         ),
