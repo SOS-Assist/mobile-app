@@ -51,16 +51,16 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Column(
           children: [
-            HeadAuth(
+            const HeadAuth(
               title: "Hello, Welcome Back!",
               greeting:
                   "Sign in now to access back your account and the whole features!",
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(25),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(25),
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
@@ -96,21 +96,21 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 },
                               ),
-                              Text("Remember Me"),
+                              const Text("Remember Me"),
                             ],
                           ),
-                          Text("Forgot Password?"),
+                          const Text("Forgot Password?"),
                         ],
                       ),
                       LoginButton(
                         onTap: signUserIn,
                         labelAction: "Login",
                       ),
-                      GoogleButton(),
+                      const GoogleButton(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Not a member? "),
+                          const Text("Not a member? "),
                           GestureDetector(
                             onTap: widget.onTap,
                             child: Text(

@@ -24,15 +24,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> _widgetOptions = [
-    Sos(),
-    Center(child: Text('(Nearby)')),
-    Center(child: Text('(History)')),
+    const Sos(),
+    const Center(child: Text('(Nearby)')),
+    const Center(child: Text('(History)')),
     Center(
       child: IconButton(
         onPressed: () {
           FirebaseAuth.instance.signOut();
         },
-        icon: Icon(Icons.logout),
+        icon: const Icon(Icons.logout),
       ),
     ),
   ];

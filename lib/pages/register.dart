@@ -18,7 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
     showDialog(
       context: context,
       builder: (context) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -54,16 +54,16 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SafeArea(
         child: Column(
           children: [
-            HeadAuth(
+            const HeadAuth(
               title: "Create an Account",
               greeting:
                   "Let’s create a new account and get started with your 30 days free trial.",
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(25),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(25),
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
@@ -103,18 +103,18 @@ class _RegisterPageState extends State<RegisterPage> {
                               });
                             },
                           ),
-                          Text("I Agree with Terms and Condition"),
+                          const Text("I Agree with Terms and Condition"),
                         ],
                       ),
                       LoginButton(
                         onTap: Register,
                         labelAction: "Register",
                       ),
-                      GoogleButton(),
+                      const GoogleButton(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Already have an account? "),
+                          const Text("Already have an account? "),
                           GestureDetector(
                             onTap: widget.onTap,
                             child: Text(
