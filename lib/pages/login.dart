@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/auth_components.dart';
+import 'package:mobile_app/services/authentication.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -11,42 +11,33 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool rememberMe = false;
+  final AuthenticationService _authenticationService = AuthenticationService();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool rememberMe = false;
 
   void signUserIn() async {
     showDialog(
       context: context,
       builder: (context) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
     );
 
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      print("Error code: ${e.code}");
-      print("Error message: ${e.message}");
-    }
-  }
-
-  void failedLoginMessage(String msg) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(msg),
-        );
-      },
+    final user = await _authenticationService.signInWithEmailAndPassword(
+      emailController.text,
+      passwordController.text,
     );
+
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed')),
+      );
+    }
+
+    Navigator.pop(context);
   }
 
   @override

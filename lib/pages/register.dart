@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/auth_components.dart';
+import 'package:mobile_app/services/authentication.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -11,6 +11,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final AuthenticationService _authenticationService = AuthenticationService();
   bool terms = false;
 
   void Register() async {
@@ -23,27 +24,19 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      failedLoginMessage(e.code);
-    }
-  }
-
-  void failedLoginMessage(String msg) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(msg),
-        );
-      },
+    final user = await _authenticationService.registerWithEmailAndPassword(
+      emailController.text,
+      passwordController.text,
+      usernameController.text,
     );
+
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed')),
+      );
+    }
+
+    Navigator.pop(context);
   }
 
   final usernameController = TextEditingController();
