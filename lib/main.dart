@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/pages/auth.dart';
+import 'package:mobile_app/authentication_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -52,6 +52,6 @@ class App extends StatelessWidget {
             displayColor: textColor,
           ),
         ),
-        home: AuthPage());
+        home: AuthenticationGate());
   }
 }

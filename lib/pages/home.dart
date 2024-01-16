@@ -1,16 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/models/user.dart';
+import 'package:mobile_app/services/authentication.dart';
 import 'package:mobile_app/widgets/sos.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String userUid;
+
+  const HomePage({super.key, required this.userUid});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final AuthenticationService _authenticationService = AuthenticationService();
+  UserModel? _user;
+  late List<Widget> _widgetOptions;
+
   int widgetIndex = 0;
 
   void setWidgetIndex(int widgetIndex) {
@@ -23,19 +31,32 @@ class _HomePageState extends State<HomePage> {
     FirebaseAuth.instance.signOut();
   }
 
-  final List<Widget> _widgetOptions = [
-    Sos(),
-    Center(child: Text('(Nearby)')),
-    Center(child: Text('(History)')),
-    Center(
-      child: IconButton(
-        onPressed: () {
-          FirebaseAuth.instance.signOut();
-        },
-        icon: Icon(Icons.logout),
+  @override
+  void initState() {
+    super.initState();
+    _fetchUser();
+    _widgetOptions = [
+      const Center(child: CircularProgressIndicator()),
+      const Center(child: Text('(Nearby)')),
+      const Center(child: Text('(History)')),
+      Center(
+        child: IconButton(
+          onPressed: () {
+            _authenticationService.signOut();
+          },
+          icon: const Icon(Icons.logout),
+        ),
       ),
-    ),
-  ];
+    ];
+  }
+
+  _fetchUser() async {
+    final user = await _authenticationService.getUser(widget.userUid);
+    setState(() {
+      _user = user;
+      _widgetOptions[0] = Sos(user: _user);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
