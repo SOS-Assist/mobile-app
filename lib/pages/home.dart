@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     final user = await _authenticationService.getUser(widget.userUid);
     setState(() {
       _user = user;
-      _widgetOptions[0] = Sos(user: user);
+      _widgetOptions[0] = Sos(user: _user);
     });
   }
 
