@@ -22,6 +22,14 @@ class _SosCallPageState extends State<SosCallPage> {
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted && _second > 0) {
         setState(() => _second--);
+      } else if (mounted && _second == 0) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SosDetailPage(),
+          ),
+          (route) => false,
+        );
       } else {
         _stopTimer();
       }
