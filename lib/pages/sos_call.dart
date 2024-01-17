@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/pages/sos_detail.dart';
 
 class SosCallPage extends StatefulWidget {
   final String sosType;
@@ -185,7 +186,16 @@ class _SosCallPageState extends State<SosCallPage> {
                 ],
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      _stopTimer();
+                      return const Dialog(child: ConfirmationDialog());
+                    },
+                  ).then((_) => _startTimer());
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -207,6 +217,109 @@ class _SosCallPageState extends State<SosCallPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ConfirmationDialog extends StatelessWidget {
+  const ConfirmationDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    return Container(
+      height: 360,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            'assets/icons/emergency-post.svg',
+            width: 150,
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Are you sure?',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Please make sure that you\'re in a safe circumstances. If you\'re sure, we\'ll cancel your SOS status.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              // fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  side: BorderSide(color: colorScheme.primary),
+                  backgroundColor: Colors.white,
+                  shadowColor: Colors.transparent,
+                  elevation: 0,
+                ),
+                child: Text(
+                  'NOT SURE',
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SosDetailPage(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  backgroundColor: colorScheme.primary,
+                  shadowColor: Colors.transparent,
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'YES I AM',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
