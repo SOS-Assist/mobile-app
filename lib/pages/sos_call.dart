@@ -18,18 +18,24 @@ class _SosCallPageState extends State<SosCallPage> {
   int _second = startTime;
   Timer? timer;
 
+  void _navigateToSosDetail() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SosDetailPage(
+          sosType: widget.sosType,
+        ),
+      ),
+      (route) => false,
+    );
+  }
+
   void _startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted && _second > 0) {
         setState(() => _second--);
       } else if (mounted && _second == 0) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SosDetailPage(),
-          ),
-          (route) => false,
-        );
+        _navigateToSosDetail();
       } else {
         _stopTimer();
       }
@@ -200,7 +206,11 @@ class _SosCallPageState extends State<SosCallPage> {
                     barrierDismissible: false,
                     builder: (BuildContext context) {
                       _stopTimer();
-                      return const Dialog(child: ConfirmationDialog());
+                      return Dialog(
+                        child: ConfirmationDialog(
+                          navigateToSosDetail: _navigateToSosDetail,
+                        ),
+                      );
                     },
                   ).then((_) => _startTimer());
                 },
@@ -231,7 +241,9 @@ class _SosCallPageState extends State<SosCallPage> {
 }
 
 class ConfirmationDialog extends StatelessWidget {
-  const ConfirmationDialog({super.key});
+  final VoidCallback navigateToSosDetail;
+
+  const ConfirmationDialog({super.key, required this.navigateToSosDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -269,7 +281,6 @@ class ConfirmationDialog extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
-              // fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 24),
@@ -299,15 +310,7 @@ class ConfirmationDialog extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SosDetailPage(),
-                    ),
-                    (route) => false,
-                  );
-                },
+                onPressed: navigateToSosDetail,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
