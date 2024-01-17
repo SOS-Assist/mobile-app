@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/pages/home.dart';
 import 'package:mobile_app/pages/sos_detail.dart';
 
 class SosCallPage extends StatefulWidget {
@@ -44,6 +45,16 @@ class _SosCallPageState extends State<SosCallPage> {
 
   void _stopTimer() {
     timer?.cancel();
+  }
+
+  void _navigateToHome() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomePage(),
+      ),
+      (route) => false,
+    );
   }
 
   @override
@@ -209,6 +220,7 @@ class _SosCallPageState extends State<SosCallPage> {
                       return Dialog(
                         child: ConfirmationDialog(
                           navigateToSosDetail: _navigateToSosDetail,
+                          navigateToHome: _navigateToHome,
                         ),
                       );
                     },
@@ -242,8 +254,13 @@ class _SosCallPageState extends State<SosCallPage> {
 
 class ConfirmationDialog extends StatelessWidget {
   final VoidCallback navigateToSosDetail;
+  final VoidCallback navigateToHome;
 
-  const ConfirmationDialog({super.key, required this.navigateToSosDetail});
+  const ConfirmationDialog({
+    super.key,
+    required this.navigateToSosDetail,
+    required this.navigateToHome,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -310,7 +327,7 @@ class ConfirmationDialog extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               ElevatedButton(
-                onPressed: navigateToSosDetail,
+                onPressed: navigateToHome,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
