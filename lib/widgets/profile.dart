@@ -23,7 +23,7 @@ class Profile extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Text(
+                      const Text(
                         "Profile",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.w600),
@@ -35,11 +35,11 @@ class Profile extends StatelessWidget {
                       const SizedBox(height: 10),
                       Text(
                         user!.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 26, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
-                      Text(
+                      const Text(
                         "Bergabung dari 20 Agustus 2019",
                         style: TextStyle(
                           fontSize: 12,
@@ -64,7 +64,7 @@ class Profile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13),
                             ),
                             backgroundColor: colorScheme.primary),
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(
                               Icons.edit,
@@ -73,7 +73,7 @@ class Profile extends StatelessWidget {
                               semanticLabel:
                                   'Text to announce in accessibility modes',
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10),
                             Text(
                               'Edit Profile',
                               style: TextStyle(color: Colors.white),
