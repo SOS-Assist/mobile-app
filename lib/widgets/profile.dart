@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/widgets/edit_profile.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  final UserModel? user;
+
+  const Profile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class Profile extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "Wahyu",
+                        user!.name,
                         style: TextStyle(
                             fontSize: 26, fontWeight: FontWeight.bold),
                       ),

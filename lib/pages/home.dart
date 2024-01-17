@@ -41,15 +41,7 @@ class _HomePageState extends State<HomePage> {
       const Center(child: CircularProgressIndicator()),
       const Center(child: NearbyFriend()),
       const Center(child: Text('(History)')),
-      const Center(child: Profile()),
-      // Center(
-      //   child: IconButton(
-      //     onPressed: () {
-      //       _authenticationService.signOut();
-      //     },
-      //     icon: const Icon(Icons.logout),
-      //   ),
-      // ),
+      const Center(child: CircularProgressIndicator()),
     ];
   }
 
@@ -58,6 +50,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _user = user;
       _widgetOptions[0] = Sos(user: _user);
+      _widgetOptions[3] = Profile(user: _user);
     });
   }
 
