@@ -38,9 +38,7 @@ class _SosDetailPageState extends State<SosDetailPage> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (context) => HomePage(
-          userUid: _user!.uid.toString(),
-        ),
+        builder: (context) => const HomePage(),
       ),
       (route) => false,
     );
