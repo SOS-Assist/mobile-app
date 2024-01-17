@@ -16,7 +16,7 @@ class AuthenticationGate extends StatelessWidget {
         stream: _authenticationService.userStream,
         builder: ((context, snapshot) {
           if (snapshot.hasData) {
-            return HomePage(userUid: snapshot.data!.uid);
+            return const HomePage();
           } else {
             return const LoginOrRegisterPage();
           }

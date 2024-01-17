@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
@@ -6,9 +5,7 @@ import 'package:mobile_app/services/authentication.dart';
 import 'package:mobile_app/widgets/sos.dart';
 
 class HomePage extends StatefulWidget {
-  final String userUid;
-
-  const HomePage({super.key, required this.userUid});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -28,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void signUserOut() {
-    FirebaseAuth.instance.signOut();
+    _authenticationService.signOut();
   }
 
   @override
@@ -41,9 +38,7 @@ class _HomePageState extends State<HomePage> {
       const Center(child: Text('(History)')),
       Center(
         child: IconButton(
-          onPressed: () {
-            _authenticationService.signOut();
-          },
+          onPressed: () => signUserOut(),
           icon: const Icon(Icons.logout),
         ),
       ),
@@ -51,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _fetchUser() async {
-    final user = await _authenticationService.getUser(widget.userUid);
+    final user = await _authenticationService.getCurrentUser();
     setState(() {
       _user = user;
       _widgetOptions[0] = Sos(user: _user);
