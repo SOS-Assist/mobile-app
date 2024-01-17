@@ -122,9 +122,9 @@ class _SosDetailPageState extends State<SosDetailPage> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const Text(
-                              '1 January 2001',
-                              style: TextStyle(
+                            Text(
+                              _user?.birthDate ?? '',
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,
                               ),
@@ -147,22 +147,34 @@ class _SosDetailPageState extends State<SosDetailPage> {
                       children: [
                         UserDataCard(
                           dataType: 'age',
-                          dataValue: [23.toString(), 'years'],
+                          dataValue: [
+                            _user!.age.toString(),
+                            'years',
+                          ],
                           iconPath: 'assets/icons/date.svg',
                         ),
-                        const UserDataCard(
+                        UserDataCard(
                           dataType: 'blood',
-                          dataValue: ['AB', 'rh-'],
+                          dataValue: [
+                            _user!.bloodType!.antigen,
+                            'rh${_user!.bloodType!.rhesus}',
+                          ],
                           iconPath: 'assets/icons/blood.svg',
                         ),
                         UserDataCard(
                           dataType: 'height',
-                          dataValue: [178.toString(), 'cm'],
+                          dataValue: [
+                            _user!.height.toString(),
+                            'cm',
+                          ],
                           iconPath: 'assets/icons/height.svg',
                         ),
                         UserDataCard(
                           dataType: 'weight',
-                          dataValue: [64.toString(), 'kg'],
+                          dataValue: [
+                            _user!.weight.toString(),
+                            'kg',
+                          ],
                           iconPath: 'assets/icons/weight.svg',
                         ),
                       ],
