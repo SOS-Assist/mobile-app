@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
@@ -17,6 +19,21 @@ class _SosDetailPageState extends State<SosDetailPage> {
   final AuthenticationService _authenticationService = AuthenticationService();
   UserModel? _user;
 
+  final Stopwatch _stopwatch = Stopwatch();
+  String _elapsedTime = '0:00:00';
+  Timer? timer;
+
+  void _startTimer() {
+    _stopwatch.start();
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() {
+          _elapsedTime = _stopwatch.elapsed.toString().substring(0, 7);
+        });
+      }
+    });
+  }
+
   void _navigateToHome() {
     Navigator.pushAndRemoveUntil(
       context,
@@ -33,6 +50,7 @@ class _SosDetailPageState extends State<SosDetailPage> {
   void initState() {
     super.initState();
     _fetchUser();
+    _startTimer();
   }
 
   _fetchUser() async {
@@ -182,7 +200,10 @@ class _SosDetailPageState extends State<SosDetailPage> {
                               color: colorScheme.outline,
                               width: 0.9,
                             ),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
                           ),
                           child: Text(
                             'SOS: ${widget.sosType}',
@@ -193,63 +214,66 @@ class _SosDetailPageState extends State<SosDetailPage> {
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 20, 0, 20),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'ELAPSED',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(163, 158, 158, 1),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 160,
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      'ELAPSED',
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(163, 158, 158, 1),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    '01:59',
-                                    style: TextStyle(
-                                      color: colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 24,
+                                    Text(
+                                      _elapsedTime,
+                                      style: TextStyle(
+                                        color: colorScheme.primary,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 60,
-                              child: VerticalDivider(
-                                  thickness: 0.6,
-                                  color: Color.fromRGBO(163, 158, 158, 1)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 40, 20),
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/people.svg',
-                                    width: 24,
-                                    colorFilter: const ColorFilter.mode(
-                                      Color.fromRGBO(163, 158, 158, 1),
-                                      BlendMode.srcIn,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    '10 Nearby',
-                                    style: TextStyle(
-                                      color: colorScheme.primary,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
+                              const SizedBox(
+                                height: 60,
+                                child: VerticalDivider(
+                                    thickness: 0.6,
+                                    color: Color.fromRGBO(163, 158, 158, 1)),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 160,
+                                child: Column(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/people.svg',
+                                      width: 24,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color.fromRGBO(163, 158, 158, 1),
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '10 Nearby',
+                                      style: TextStyle(
+                                        color: colorScheme.primary,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
