@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
+import 'package:mobile_app/widgets/nearby_friends.dart';
 import 'package:mobile_app/services/authentication.dart';
+import 'package:mobile_app/widgets/profile.dart';
 import 'package:mobile_app/widgets/sos.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,16 +39,17 @@ class _HomePageState extends State<HomePage> {
     _fetchUser();
     _widgetOptions = [
       const Center(child: CircularProgressIndicator()),
-      const Center(child: Text('(Nearby)')),
+      const Center(child: NearbyFriend()),
       const Center(child: Text('(History)')),
-      Center(
-        child: IconButton(
-          onPressed: () {
-            _authenticationService.signOut();
-          },
-          icon: const Icon(Icons.logout),
-        ),
-      ),
+      const Center(child: Profile()),
+      // Center(
+      //   child: IconButton(
+      //     onPressed: () {
+      //       _authenticationService.signOut();
+      //     },
+      //     icon: const Icon(Icons.logout),
+      //   ),
+      // ),
     ];
   }
 

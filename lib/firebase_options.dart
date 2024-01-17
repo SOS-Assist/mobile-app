@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '689406118129',
     projectId: 'sos-assist-0001',
     authDomain: 'sos-assist-0001.firebaseapp.com',
+    databaseURL: 'https://sos-assist-0001-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'sos-assist-0001.appspot.com',
   );
 
@@ -57,6 +58,7 @@ class DefaultFirebaseOptions {
     appId: '1:689406118129:android:4346aa21c685a5a2dd0150',
     messagingSenderId: '689406118129',
     projectId: 'sos-assist-0001',
+    databaseURL: 'https://sos-assist-0001-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'sos-assist-0001.appspot.com',
   );
 
@@ -65,6 +67,7 @@ class DefaultFirebaseOptions {
     appId: '1:689406118129:ios:478702f2a7ca739bdd0150',
     messagingSenderId: '689406118129',
     projectId: 'sos-assist-0001',
+    databaseURL: 'https://sos-assist-0001-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'sos-assist-0001.appspot.com',
     iosBundleId: 'com.example.mobileApp',
   );
@@ -74,6 +77,7 @@ class DefaultFirebaseOptions {
     appId: '1:689406118129:ios:7239532c1d8e0a34dd0150',
     messagingSenderId: '689406118129',
     projectId: 'sos-assist-0001',
+    databaseURL: 'https://sos-assist-0001-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'sos-assist-0001.appspot.com',
     iosBundleId: 'com.example.mobileApp.RunnerTests',
   );
