@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobile_app/models/user.dart';
 
-class UserDataServices {
+class UserDataService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<UserModel?>> getAllUser() async {
