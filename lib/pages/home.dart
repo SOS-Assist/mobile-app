@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
-import 'package:mobile_app/services/authentication.dart';
 import 'package:mobile_app/widgets/sos.dart';
+import 'package:mobile_app/services/authentication.dart';
+import 'package:mobile_app/services/location.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,10 +16,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final AuthenticationService _authenticationService = AuthenticationService();
-  UserModel? _user;
+  final LocationService _locationService = LocationService();
   late List<Widget> _widgetOptions;
-
   int widgetIndex = 0;
+  UserModel? _user;
 
   void setWidgetIndex(int widgetIndex) {
     setState(() {
@@ -31,7 +34,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchUser();
+    _locationService.handleLocationPermission();
+    _fetchUser().then((_) => _listenUserLocation());
     _widgetOptions = [
       const Center(child: CircularProgressIndicator()),
       const Center(child: Text('(Nearby)')),
@@ -45,11 +49,22 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  _fetchUser() async {
+  void _listenUserLocation() {
+    _locationService.listenUserLocation('${_user!.uid}');
+  }
+
+  void _cancelUserLocationListener() {
+    _locationService.dispose();
+  }
+
+  Future<void> _fetchUser() async {
     final user = await _authenticationService.getCurrentUser();
     setState(() {
       _user = user;
-      _widgetOptions[0] = Sos(user: _user);
+      _widgetOptions[0] = Sos(
+        user: _user,
+        cancelUserLocationListener: _cancelUserLocationListener,
+      );
     });
   }
 

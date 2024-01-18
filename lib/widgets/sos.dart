@@ -4,9 +4,14 @@ import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/pages/sos_call.dart';
 
 class Sos extends StatefulWidget {
+  final dynamic cancelUserLocationListener;
   final UserModel? user;
 
-  const Sos({super.key, required this.user});
+  const Sos({
+    super.key,
+    required this.user,
+    required this.cancelUserLocationListener,
+  });
 
   @override
   State<Sos> createState() => _SosState();
@@ -38,7 +43,11 @@ class _SosState extends State<Sos> {
                 padding: const EdgeInsets.all(22),
                 child: Column(
                   children: [
-                    SosButton(sosType: _sosType),
+                    SosButton(
+                      sosType: _sosType,
+                      cancelUserLocationListener:
+                          widget.cancelUserLocationListener,
+                    ),
                     const SizedBox(height: 32),
                     SosList(
                       setSosType: setSosType,
@@ -107,9 +116,14 @@ class GreetingsText extends StatelessWidget {
 }
 
 class SosButton extends StatelessWidget {
+  final dynamic cancelUserLocationListener;
   final String sosType;
 
-  const SosButton({super.key, required this.sosType});
+  const SosButton({
+    super.key,
+    required this.sosType,
+    required this.cancelUserLocationListener,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +171,7 @@ class SosButton extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
+                  cancelUserLocationListener();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
