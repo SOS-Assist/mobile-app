@@ -1,16 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
-import 'package:mobile_app/widgets/nearby_friends.dart';
-import 'package:mobile_app/services/authentication.dart';
-import 'package:mobile_app/widgets/profile.dart';
 import 'package:mobile_app/widgets/sos.dart';
+import 'package:mobile_app/widgets/nearby_friends.dart';
+import 'package:mobile_app/widgets/profile.dart';
+import 'package:mobile_app/services/authentication.dart';
+import 'package:mobile_app/services/location.dart';
 
 class HomePage extends StatefulWidget {
-  final String userUid;
-
-  const HomePage({super.key, required this.userUid});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -18,10 +18,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final AuthenticationService _authenticationService = AuthenticationService();
-  UserModel? _user;
+  final LocationService _locationService = LocationService();
+  bool _isLocationServicesEnabled = false;
   late List<Widget> _widgetOptions;
-
   int widgetIndex = 0;
+  UserModel? _user;
+
+  void setIsLocationServicesEnabled(bool isLocationServicesEnabled) {
+    setState(() {
+      _isLocationServicesEnabled = isLocationServicesEnabled;
+    });
+  }
 
   void setWidgetIndex(int widgetIndex) {
     setState(() {
@@ -30,13 +37,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   void signUserOut() {
-    FirebaseAuth.instance.signOut();
+    _authenticationService.signOut();
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchUser();
+    _fetchUser().then((_) {
+      _locationService.handleLocationPermission().then((_) {
+        setState(() {
+          _isLocationServicesEnabled = true;
+          _widgetOptions[0] = Sos(
+            isLocationServicesEnabled: _isLocationServicesEnabled,
+            cancelUserLocationListener: _cancelUserLocationListener,
+            user: _user,
+          );
+        });
+        _listenUserLocation();
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.toString())),
+        );
+      });
+    });
+
     _widgetOptions = [
       const Center(child: CircularProgressIndicator()),
       const Center(child: NearbyFriend()),
@@ -45,11 +69,23 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  _fetchUser() async {
-    final user = await _authenticationService.getUser(widget.userUid);
+  void _listenUserLocation() {
+    _locationService.listenUserLocation('${_user!.uid}');
+  }
+
+  void _cancelUserLocationListener() {
+    _locationService.dispose();
+  }
+
+  Future<void> _fetchUser() async {
+    final user = await _authenticationService.getCurrentUser();
     setState(() {
       _user = user;
-      _widgetOptions[0] = Sos(user: _user);
+      _widgetOptions[0] = Sos(
+        isLocationServicesEnabled: _isLocationServicesEnabled,
+        cancelUserLocationListener: _cancelUserLocationListener,
+        user: _user,
+      );
       _widgetOptions[3] = Profile(user: _user);
     });
   }

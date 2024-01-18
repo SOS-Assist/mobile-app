@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app/models/user.dart';
@@ -44,6 +46,16 @@ class AuthenticationService {
 
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  Future<UserModel?> getCurrentUser() async {
+    try {
+      final uid = _auth.currentUser?.uid;
+      return await getUser(uid.toString());
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future<UserModel?> getUser(String uid) async {
