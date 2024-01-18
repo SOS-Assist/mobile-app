@@ -99,7 +99,7 @@ class _EditProfileState extends State<EditProfile> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: Row(
+                    child: const Row(
                       children: [
                         Icon(
                           Icons.arrow_back,
@@ -108,7 +108,7 @@ class _EditProfileState extends State<EditProfile> {
                           semanticLabel:
                               'Text to announce in accessibility modes',
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: 10),
                         Text(
                           "Edit Profile",
                           style: TextStyle(
@@ -123,7 +123,7 @@ class _EditProfileState extends State<EditProfile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  Text(
+                  const Text(
                     "Informasi Data Diri",
                     style: TextStyle(
                       fontSize: 24,
@@ -161,7 +161,7 @@ class _EditProfileState extends State<EditProfile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 50),
-                  Text(
+                  const Text(
                     "Informasi Data Diri",
                     style: TextStyle(
                       fontSize: 24,

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/services/authentication.dart';
+import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/widgets/edit_profile.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  final UserModel? user;
+
+  const Profile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class Profile extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Text(
+                      const Text(
                         "Profile",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.w600),
@@ -40,12 +43,12 @@ class Profile extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "Wahyu",
-                        style: TextStyle(
+                        user!.name,
+                        style: const TextStyle(
                             fontSize: 26, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
-                      Text(
+                      const Text(
                         "Bergabung dari 20 Agustus 2019",
                         style: TextStyle(
                           fontSize: 12,
@@ -70,7 +73,7 @@ class Profile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13),
                             ),
                             backgroundColor: colorScheme.primary),
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(
                               Icons.edit,
@@ -79,7 +82,7 @@ class Profile extends StatelessWidget {
                               semanticLabel:
                                   'Text to announce in accessibility modes',
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10),
                             Text(
                               'Edit Profile',
                               style: TextStyle(color: Colors.white),
