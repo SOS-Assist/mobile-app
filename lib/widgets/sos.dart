@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/pages/sos_call.dart';
+import 'package:mobile_app/services/user_data.dart';
 
 class Sos extends StatefulWidget {
   final bool isLocationServicesEnabled;
@@ -78,15 +79,16 @@ class GreetingsText extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final nameInitial = UserDataService().getInitials(name);
 
     return Row(
       children: [
         CircleAvatar(
             radius: 25,
             backgroundColor: colorScheme.primary,
-            child: const Text(
-              'RA',
-              style: TextStyle(
+            child: Text(
+              nameInitial,
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),
@@ -139,7 +141,6 @@ class SosButton extends StatelessWidget {
 
     return SizedBox(
       width: screenWidth,
-      // height: 310,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

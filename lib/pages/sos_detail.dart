@@ -6,6 +6,7 @@ import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/pages/home.dart';
 import 'package:mobile_app/services/authentication.dart';
 import 'package:mobile_app/services/sos_call.dart';
+import 'package:mobile_app/services/user_data.dart';
 
 class SosDetailPage extends StatefulWidget {
   final String sosType;
@@ -20,6 +21,7 @@ class _SosDetailPageState extends State<SosDetailPage> {
   final SosCallService _sosCallService = SosCallService();
   final AuthenticationService _authenticationService = AuthenticationService();
   UserModel? _user;
+  String? _nameInitial;
 
   final Stopwatch _stopwatch = Stopwatch();
   String _elapsedTime = '0:00:00';
@@ -59,6 +61,7 @@ class _SosDetailPageState extends State<SosDetailPage> {
     final user = await _authenticationService.getCurrentUser();
     setState(() {
       _user = user;
+      _nameInitial = UserDataService().getInitials(_user!.name);
     });
   }
 
@@ -109,9 +112,9 @@ class _SosDetailPageState extends State<SosDetailPage> {
                         CircleAvatar(
                           radius: 25,
                           backgroundColor: colorScheme.primary,
-                          child: const Text(
-                            'RA',
-                            style: TextStyle(
+                          child: Text(
+                            '$_nameInitial',
+                            style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                             ),
