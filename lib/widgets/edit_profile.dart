@@ -1,21 +1,89 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/auth_components.dart';
+import 'package:mobile_app/pages/home.dart';
+import 'package:mobile_app/services/user_data.dart';
 
-class EditProfile extends StatelessWidget {
-  const EditProfile({super.key});
+class EditProfile extends StatefulWidget {
+  EditProfile({super.key});
 
-  void editUserProfile() {}
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  final UserDataServices _userDataServices = UserDataServices();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<bool> updateUserProfile(name, height, weight) async {
+    try {
+      await _userDataServices.updateUser(name, weight, height);
+      return true; // Update successful
+    } catch (e) {
+      print(e);
+      return false; // Update failed
+    }
+  }
+
+  void handleUserUpdate() async {
+    final name = nameController.text;
+    final int? height = int.tryParse(userHeightController.text);
+    final int? weight = int.tryParse(userWeightController.text);
+
+    final String? userUid = _auth.currentUser?.uid;
+
+    showDialog(
+      context:
+          context, // Safe to use context here as it's not within an async gap
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    if (name == "" || height == null || weight == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Update Failed')),
+      );
+      Navigator.pop(context);
+      return;
+    }
+
+    final updateSuccessful = await updateUserProfile(name, height, weight);
+
+    Navigator.pop(context);
+
+    if (updateSuccessful) {
+      final route = MaterialPageRoute(
+        builder: (context) =>
+            HomePage(userUid: userUid ?? ""), // Handle potential null userUid
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Update Success')),
+      );
+
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => Navigator.push(context, route));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Update Failed')),
+      );
+    }
+  }
+
+  final nameController = TextEditingController();
+  final addressController = TextEditingController();
+  final birthController = TextEditingController();
+  final phoneController = TextEditingController();
+  final userHeightController = TextEditingController();
+  final userWeightController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
-    final nameController = TextEditingController();
-    final addressController = TextEditingController();
-    final birthController = TextEditingController();
-    final phoneController = TextEditingController();
-    final userHeightController = TextEditingController();
-    final userWeightController = TextEditingController();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -114,7 +182,9 @@ class EditProfile extends StatelessWidget {
                     obscureText: false,
                   ),
                   LoginButton(
-                      onTap: editUserProfile, labelAction: "Simpan Data")
+                    onTap: handleUserUpdate,
+                    labelAction: "Simpan Data",
+                  )
                 ],
               ),
             ],
@@ -124,32 +194,3 @@ class EditProfile extends StatelessWidget {
     );
   }
 }
-
-// class FormEditProfile extends StatelessWidget {
-//   const FormEditProfile({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final ThemeData theme = Theme.of(context);
-//     final ColorScheme colorScheme = theme.colorScheme;
-//     final double screenWidth = MediaQuery.of(context).size.width;
-
-//     final nameController = TextEditingController();
-
-//     return Column(
-//       children: [
-//         SizedBox(
-//           width: screenWidth,
-//           child: Scaffold(
-//             body: AuthTextField(
-//               labelText: "Name",
-//               controller: nameController,
-//               hintText: "Name",
-//               obscureText: false,
-//             ),
-//           ),
-//         )
-//       ],
-//     );
-//   }
-// }

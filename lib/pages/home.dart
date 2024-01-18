@@ -42,14 +42,6 @@ class _HomePageState extends State<HomePage> {
       const Center(child: NearbyFriend()),
       const Center(child: Text('(History)')),
       const Center(child: Profile()),
-      // Center(
-      //   child: IconButton(
-      //     onPressed: () {
-      //       _authenticationService.signOut();
-      //     },
-      //     icon: const Icon(Icons.logout),
-      //   ),
-      // ),
     ];
   }
 

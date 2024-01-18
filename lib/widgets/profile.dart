@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/services/authentication.dart';
 import 'package:mobile_app/widgets/edit_profile.dart';
 
 class Profile extends StatelessWidget {
@@ -8,6 +9,8 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final AuthenticationService _authenticationService =
+        AuthenticationService();
 
     return SafeArea(
       child: Scaffold(
@@ -24,6 +27,12 @@ class Profile extends StatelessWidget {
                         "Profile",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.w600),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _authenticationService.signOut();
+                        },
+                        icon: const Icon(Icons.logout),
                       ),
                       const SizedBox(height: 30),
                       Image.asset(
@@ -48,7 +57,7 @@ class Profile extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const EditProfile(),
+                              builder: (context) => EditProfile(),
                             ),
                           );
                         },
