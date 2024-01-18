@@ -17,9 +17,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final AuthenticationService _authenticationService = AuthenticationService();
   final LocationService _locationService = LocationService();
+  bool _isLocationServicesEnabled = false;
   late List<Widget> _widgetOptions;
   int widgetIndex = 0;
   UserModel? _user;
+
+  void setIsLocationServicesEnabled(bool isLocationServicesEnabled) {
+    setState(() {
+      _isLocationServicesEnabled = isLocationServicesEnabled;
+    });
+  }
 
   void setWidgetIndex(int widgetIndex) {
     setState(() {
@@ -34,8 +41,24 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _locationService.handleLocationPermission();
-    _fetchUser().then((_) => _listenUserLocation());
+    _fetchUser().then((_) {
+      _locationService.handleLocationPermission().then((_) {
+        setState(() {
+          _isLocationServicesEnabled = true;
+          _widgetOptions[0] = Sos(
+            isLocationServicesEnabled: _isLocationServicesEnabled,
+            cancelUserLocationListener: _cancelUserLocationListener,
+            user: _user,
+          );
+        });
+        _listenUserLocation();
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.toString())),
+        );
+      });
+    });
+
     _widgetOptions = [
       const Center(child: CircularProgressIndicator()),
       const Center(child: Text('(Nearby)')),
@@ -62,8 +85,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _user = user;
       _widgetOptions[0] = Sos(
-        user: _user,
+        isLocationServicesEnabled: _isLocationServicesEnabled,
         cancelUserLocationListener: _cancelUserLocationListener,
+        user: _user,
       );
     });
   }

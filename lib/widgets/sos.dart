@@ -4,13 +4,15 @@ import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/pages/sos_call.dart';
 
 class Sos extends StatefulWidget {
+  final bool isLocationServicesEnabled;
   final dynamic cancelUserLocationListener;
   final UserModel? user;
 
   const Sos({
     super.key,
-    required this.user,
+    required this.isLocationServicesEnabled,
     required this.cancelUserLocationListener,
+    required this.user,
   });
 
   @override
@@ -44,9 +46,11 @@ class _SosState extends State<Sos> {
                 child: Column(
                   children: [
                     SosButton(
-                      sosType: _sosType,
+                      isLocationServicesEnabled:
+                          widget.isLocationServicesEnabled,
                       cancelUserLocationListener:
                           widget.cancelUserLocationListener,
+                      sosType: _sosType,
                     ),
                     const SizedBox(height: 32),
                     SosList(
@@ -116,13 +120,15 @@ class GreetingsText extends StatelessWidget {
 }
 
 class SosButton extends StatelessWidget {
+  final bool isLocationServicesEnabled;
   final dynamic cancelUserLocationListener;
   final String sosType;
 
   const SosButton({
     super.key,
-    required this.sosType,
+    required this.isLocationServicesEnabled,
     required this.cancelUserLocationListener,
+    required this.sosType,
   });
 
   @override
@@ -133,7 +139,7 @@ class SosButton extends StatelessWidget {
 
     return SizedBox(
       width: screenWidth,
-      height: 300,
+      // height: 310,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -144,7 +150,9 @@ class SosButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(
+            top: 20,
+          ),
           child: Column(
             children: [
               Container(
@@ -171,6 +179,9 @@ class SosButton extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
+                  if (!isLocationServicesEnabled) {
+                    return;
+                  }
                   cancelUserLocationListener();
                   Navigator.push(
                     context,
@@ -185,7 +196,9 @@ class SosButton extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: colorScheme.primary,
+                      color: isLocationServicesEnabled
+                          ? colorScheme.primary
+                          : const Color.fromRGBO(0, 0, 0, 0.1),
                       width: 40,
                     ),
                     shape: BoxShape.circle,
@@ -194,11 +207,42 @@ class SosButton extends StatelessWidget {
                     'assets/icons/call.svg',
                     width: 38,
                     height: 38,
+                    colorFilter: ColorFilter.mode(
+                      isLocationServicesEnabled
+                          ? colorScheme.primary
+                          : const Color.fromRGBO(0, 0, 0, 0.15),
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
                 iconSize: 38,
-                color: colorScheme.primary,
               ),
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 4,
+                ),
+                width: !isLocationServicesEnabled ? screenWidth : 0,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  !isLocationServicesEnabled
+                      ? 'Please enable location services to make an SOS call'
+                      : '',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
             ],
           ),
         ),
