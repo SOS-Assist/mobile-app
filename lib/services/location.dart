@@ -33,14 +33,22 @@ class LocationService {
     }
   }
 
-  void storeUserLocation(String userUid, GeoFirePoint geoFirePoint) {
-    _firestore
-        .collection('users')
-        .doc(userUid)
-        .update({'position': geoFirePoint.data});
+  void storeUserLocation(String uid, GeoFirePoint geoFirePoint,
+      {bool sos = false}) {
+    if (sos) {
+      _firestore
+          .collection('sos_calls')
+          .doc(uid)
+          .update({'position': geoFirePoint.data});
+    } else {
+      _firestore
+          .collection('users')
+          .doc(uid)
+          .update({'position': geoFirePoint.data});
+    }
   }
 
-  Future<void> listenUserLocation(String userUid) async {
+  Future<void> listenUserLocation(String uid, {bool sos = false}) async {
     positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position position) {
@@ -48,7 +56,7 @@ class LocationService {
         latitude: position.latitude,
         longitude: position.longitude,
       );
-      storeUserLocation(userUid, geoFirePoint);
+      storeUserLocation(uid, geoFirePoint, sos: sos);
     });
   }
 

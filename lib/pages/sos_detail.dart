@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/pages/home.dart';
 import 'package:mobile_app/services/authentication.dart';
+import 'package:mobile_app/services/sos_call.dart';
 
 class SosDetailPage extends StatefulWidget {
   final String sosType;
@@ -16,6 +17,7 @@ class SosDetailPage extends StatefulWidget {
 }
 
 class _SosDetailPageState extends State<SosDetailPage> {
+  final SosCallService _sosCallService = SosCallService();
   final AuthenticationService _authenticationService = AuthenticationService();
   UserModel? _user;
 
@@ -47,15 +49,21 @@ class _SosDetailPageState extends State<SosDetailPage> {
   @override
   void initState() {
     super.initState();
-    _fetchUser();
+    _fetchUser().then((_) {
+      _sosCallService.createSosCall(widget.sosType, '${_user!.uid}');
+    });
     _startTimer();
   }
 
-  _fetchUser() async {
+  Future<void> _fetchUser() async {
     final user = await _authenticationService.getCurrentUser();
     setState(() {
       _user = user;
     });
+  }
+
+  void _cancelUserLocationListener() {
+    _sosCallService.dispose();
   }
 
   @override
@@ -297,6 +305,8 @@ class _SosDetailPageState extends State<SosDetailPage> {
                         builder: (BuildContext context) {
                           return Dialog(
                             child: ConfirmationDialog(
+                              cancelUserLocationListener:
+                                  _cancelUserLocationListener,
                               navigateToHome: _navigateToHome,
                             ),
                           );
@@ -401,9 +411,14 @@ class UserDataCard extends StatelessWidget {
 }
 
 class ConfirmationDialog extends StatelessWidget {
+  final VoidCallback cancelUserLocationListener;
   final VoidCallback navigateToHome;
 
-  const ConfirmationDialog({super.key, required this.navigateToHome});
+  const ConfirmationDialog({
+    super.key,
+    required this.navigateToHome,
+    required this.cancelUserLocationListener,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -470,7 +485,10 @@ class ConfirmationDialog extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               ElevatedButton(
-                onPressed: navigateToHome,
+                onPressed: () {
+                  cancelUserLocationListener();
+                  navigateToHome();
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
